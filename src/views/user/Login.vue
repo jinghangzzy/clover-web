@@ -43,7 +43,7 @@
         </a-tab-pane>
         <a-tab-pane key="tab2" :tab="$t('user.login.tab-login-mobile')">
           <a-form-item>
-            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['phone', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.login.mobile.placeholder') }], validateTrigger: 'change'}]">
+            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['userPhone', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.login.mobile.placeholder') }], validateTrigger: 'change'}]">
               <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>
           </a-form-item>
@@ -51,7 +51,7 @@
           <a-row :gutter="16">
             <a-col class="gutter-row" :span="16">
               <a-form-item>
-                <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['sms_captcha', {rules: [{ required: true, message: $t('user.verification-code.required') }], validateTrigger: 'blur'}]">
+                <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['smsCaptcha', {rules: [{ required: true, message: $t('user.verification-code.required') }], validateTrigger: 'blur'}]">
                   <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
                 </a-input>
               </a-form-item>
@@ -181,7 +181,7 @@ export default {
 
       state.loginBtn = true
 
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['loginName', 'userPassword'] : ['phone', 'smsCaptcha']
+      const validateFieldsKey = customActiveKey === 'tab1' ? ['loginName', 'userPassword'] : ['userPhone', 'smsCaptcha']
       const loginType = customActiveKey === 'tab1' ? 'account' : 'phone'
 
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
@@ -212,7 +212,7 @@ export default {
       e.preventDefault()
       const { form: { validateFields }, state } = this
 
-      validateFields(['phone'], { force: true }, (err, values) => {
+      validateFields(['userPhone'], { force: true }, (err, values) => {
         if (!err) {
           state.smsSendBtn = true
 
@@ -225,7 +225,7 @@ export default {
           }, 1000)
 
           const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ userPhone: values.phone }).then(res => {
+          getSmsCaptcha({ userPhone: values.userPhone }).then(res => {
             setTimeout(hide, 2500)
             if (res.success) {
               this.$notification['success']({
